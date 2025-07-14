@@ -1,3 +1,5 @@
+require('dotenv').config(); // ✅ Load variables from .env
+
 const express = require('express');
 const http = require('http');
 const WebSocket = require('ws');
@@ -10,10 +12,10 @@ const wss = new WebSocket.Server({ server });
 
 const sessions = new Map(); // sessionId -> Set of sockets
 
-// ✅ Serve built React frontend
+// ✅ Serve built React frontend from 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ✅ React Router fallback (for /room/:id routes)
+// ✅ Fallback for React Router (e.g., /room/:id)
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
@@ -62,7 +64,7 @@ wss.on('connection', (ws) => {
   });
 });
 
-// ✅ Start server
+// ✅ Start server on port from .env or default 5000
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
